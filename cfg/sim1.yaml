@@ -1,0 +1,32 @@
+
+steps: 200  # the number of time steps in a simulation
+sampling_period: 0.1
+
+dynamics:
+  change_interval: 50
+  initial_model_idx: 0
+  model: 
+  - kind: ConstantVelocity
+    sigma_w: [5., 5.]    # standard deviation of system noises.
+    sigma_v: [1.5, 1.5]  # standard deviation of observation noises. 
+    initial_x: [0.0, 18.0, 0.0, 18.0]  # [m, m/s, m, m/s]
+  
+  - kind: CoordinatedTurn
+    sigma_w: [1.5, 1.5, 1.5]  # standard deviation of system noises.
+    sigma_v: [1.5, 1.5]       # standard deviation of observation noises.
+    initial_x: [0.0, 18.0, 0.0, 18.0, 0.0]  # [m, m/s, m, m/s, rad/s]
+
+imm_filter:
+  mode_proba: [0.5, 0.5]
+
+  transition_mat: [[0.95, 0.05],
+                   [0.05, 0.95]]
+
+  kalman_filter:
+  - kind: LKF
+    model_idx: 0
+    initial_P: [1.0, 100.0, 1.0, 100.0]  # initial covariance
+  
+  - kind: UKF
+    model_idx: 1
+    initial_P: [1.0, 100.0, 1.0, 100.0, 100.0]  # initial covariance
